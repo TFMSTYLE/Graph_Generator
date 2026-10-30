@@ -1,7 +1,10 @@
+# SPDX-FileCopyrightText: 2025-2026 The French Monkey
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 bl_info = {
     "name": "Graph Generator",
     "author": "The French Monkey",
-    "version": (1, 2, 2),
+    "version": (1, 2, 3),
     "blender": (4, 4, 0),
     "location": "Graph Editor > Sidebar > Graph Generator",
     "description": "Generate graph between saved keyframes.",

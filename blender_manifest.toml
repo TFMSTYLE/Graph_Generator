@@ -1,11 +1,12 @@
 schema_version = "1.0.0"
 
 id = "graph_generator"
-version = "1.2.2"
+version = "1.2.3"
 name = "Graph Generator"
 tagline = "Generate graph between saved keyframes"
 maintainer = "The French Monkey"
 license = ["SPDX:GPL-3.0-or-later"]
+copyright = ["2025-2026 The French Monkey"]
 type = "add-on"
 blender_version_min = "4.4.0"
 tags = ["Animation"]
@@ -14,3 +15,5 @@ tags = ["Animation"]
 website = "https://tfmstyle.com"
 report_issues = "https://github.com/TFMSTYLE/Graph_Generator/issues"
 
+[build]
+paths = ["__init__.py", "LICENSE"]
