@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.5
+
+- Added update checks: when a new version is published on Relay, an Update button appears in this panel. Nothing goes online when Allow Online Access is off, and Blender store installs keep updating through the store
+
 ## 1.2.4
 
 - Fixed the error on Blender 5: Save Keyframes and the bone tools stopped with "Action object has no attribute fcurves"

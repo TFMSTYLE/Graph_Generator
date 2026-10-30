@@ -4,7 +4,7 @@
 bl_info = {
     "name": "Graph Generator",
     "author": "The French Monkey",
-    "version": (1, 2, 4),
+    "version": (1, 2, 5),
     "blender": (4, 4, 0),
     "location": "Graph Editor > Sidebar > Graph Generator",
     "description": "Generate graph between saved keyframes.",
@@ -17,6 +17,11 @@ import random
 import math
 import re
 import json
+
+try:
+    from . import relay_updater
+except ImportError:  # the Addon Collection has its own updates
+    relay_updater = None
 
 EPS = 1e-6
 
@@ -1056,6 +1061,8 @@ class GRAPHGENERATOR_PT_panel(bpy.types.Panel):
     bl_label = "Graph Generator"
 
     def draw(self, context):
+        if relay_updater:
+            relay_updater.draw(self.layout)
         layout = self.layout
         s = context.scene.graphgen_settings
 
@@ -1160,11 +1167,15 @@ classes = (
 )
 
 def register():
+    if relay_updater:
+        relay_updater.register("blender-graph")
     for cls in classes:
         bpy.utils.register_class(cls)
     bpy.types.Scene.graphgen_settings = bpy.props.PointerProperty(type=GraphGenSettings)
 
 def unregister():
+    if relay_updater:
+        relay_updater.unregister()
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.graphgen_settings
