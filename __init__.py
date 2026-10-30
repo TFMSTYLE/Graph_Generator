@@ -4,7 +4,7 @@
 bl_info = {
     "name": "Graph Generator",
     "author": "The French Monkey",
-    "version": (1, 2, 5),
+    "version": (1, 2, 6),
     "blender": (4, 4, 0),
     "location": "Graph Editor > Sidebar > Graph Generator",
     "description": "Generate graph between saved keyframes.",
@@ -499,27 +499,21 @@ def get_dynamic_locations(self, context):
 
     items = []
     seen = set()
-    
-    debug_info = []
 
     for gid, pts in d.items():
         if not pts:
-            debug_info.append(f"GID {gid}: empty points")
             continue
 
         if not isinstance(gid, str) or not gid.isdigit():
-            debug_info.append(f"GID {gid}: invalid ID format")
             continue
 
         dp = pts[0][0]
         ai = pts[0][1]
 
         if not isinstance(dp, str) or not is_ascii(dp):
-            debug_info.append(f"GID {gid}: non-ASCII data path")
             continue
         
         if not isinstance(ai, int):
-            debug_info.append(f"GID {gid}: invalid array index")
             continue
 
         bone_name = extract_bone_from_path(dp)
@@ -527,17 +521,14 @@ def get_dynamic_locations(self, context):
             bone_name = "OBJECT"
         
         if not is_ascii(bone_name):
-            debug_info.append(f"GID {gid}: non-ASCII bone name")
             bone_name = "OBJECT"
 
         if bone_filter != "OBJECT":
             if bone_name != bone_filter:
-                debug_info.append(f"GID {gid}: bone {bone_name} != filter {bone_filter}")
                 continue
 
         sig = (dp, ai)
         if sig in seen:
-            debug_info.append(f"GID {gid}: duplicate signature")
             continue
         seen.add(sig)
 
@@ -546,24 +537,12 @@ def get_dynamic_locations(self, context):
             label = f"{bone_name} - {label}"
         
         if not is_ascii(label):
-            debug_info.append(f"GID {gid}: non-ASCII label")
             continue
         
         if not is_ascii(gid):
-            debug_info.append(f"GID {gid}: non-ASCII gid")
             continue
 
-        debug_info.append(f"GID {gid}: ADDED - {label}")
         items.append((gid, label, ""))
-
-    if debug_info:
-        print("\n=== Graph Selector Debug ===")
-        print(f"Bone filter: {bone_filter}")
-        print(f"Total saved graphs: {len(d)}")
-        print(f"Visible items: {len(items)}")
-        for line in debug_info:
-            print(line)
-        print("===========================\n")
 
     if not items:
         if bone_filter != "OBJECT":
