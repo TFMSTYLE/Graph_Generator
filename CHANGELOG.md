@@ -6,7 +6,6 @@ The source code is now in this repository, with the license it has always been r
 
 - Added the GPL 3.0 license text and a copyright notice
 - The package now lists exactly which files it holds
-- Restored the store name and tags
 
 ## 1.2.2
 
