@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.4
+
+- Fixed the error on Blender 5: Save Keyframes and the bone tools stopped with "Action object has no attribute fcurves"
+
 ## 1.2.3
 
 The source code is now in this repository, with the license it has always been released under.

@@ -4,7 +4,7 @@
 bl_info = {
     "name": "Graph Generator",
     "author": "The French Monkey",
-    "version": (1, 2, 3),
+    "version": (1, 2, 4),
     "blender": (4, 4, 0),
     "location": "Graph Editor > Sidebar > Graph Generator",
     "description": "Generate graph between saved keyframes.",
@@ -86,6 +86,10 @@ EASING_PRESETS = {
 # --------------------------------
 # Utilities
 # --------------------------------
+
+def legacy_fcurves(action):
+    # Blender 5.0 removed Action.fcurves: every curve lives in a channelbag now.
+    return getattr(action, "fcurves", ())
 
 def extract_bone_from_path(data_path):
     if not data_path or 'pose.bones[' not in data_path:
@@ -243,7 +247,7 @@ def get_bone_enum_items(self, context):
     action = obj.animation_data.action
     animated_bones = set()
     
-    for fc in action.fcurves:
+    for fc in legacy_fcurves(action):
         bone_name = extract_bone_from_path(fc.data_path)
         if bone_name and is_ascii(bone_name):
             animated_bones.add(bone_name)
@@ -278,7 +282,7 @@ def get_animated_bone_count(context):
     action = obj.animation_data.action
     bones = set()
 
-    for fc in action.fcurves:
+    for fc in legacy_fcurves(action):
         bone = extract_bone_from_path(fc.data_path)
         if bone and is_ascii(bone):
             bones.add(bone)
@@ -612,7 +616,8 @@ def get_fcurve_for_graph(action, pts):
         
         return cbag.fcurves.find(dp, index=ai)
     else:
-        return action.fcurves.find(dp, index=ai)
+        fcurves = legacy_fcurves(action)
+        return fcurves.find(dp, index=ai) if fcurves else None
 
 def delete_generated_keyframes(action, pts, s, graph_id):
     if not pts:
@@ -683,6 +688,8 @@ def generate_graph_core(action, obj, pts, cfg, graph_id, s):
             fcurve = cbag.fcurves.new(dp, index=ai)
 
     else:
+        if not hasattr(action, "fcurves"):
+            return
         fcurve = action.fcurves.find(dp, index=ai)
         if not fcurve:
             fcurve = action.fcurves.new(dp, index=ai)
@@ -832,7 +839,7 @@ class GRAPHGENERATOR_OT_save_selected(bpy.types.Operator):
         selected = set()
         highlighted_only = s.save_highlighted_only
 
-        for fc in act.fcurves:
+        for fc in legacy_fcurves(act):
             if highlighted_only:
                 if not fc.select or fc.hide:
                     continue
@@ -900,7 +907,7 @@ class GRAPHGENERATOR_OT_save_selected(bpy.types.Operator):
                         if (fc.data_path, fc.array_index, safe_slot_id) in selected:
                             collect(fc, safe_slot_id)
         else:
-            for fc in act.fcurves:
+            for fc in legacy_fcurves(act):
                 if (fc.data_path, fc.array_index, None) in selected:
                     collect(fc, None)
 
