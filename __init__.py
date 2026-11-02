@@ -4,7 +4,7 @@
 bl_info = {
     "name": "Graph Generator",
     "author": "The French Monkey",
-    "version": (1, 2, 6),
+    "version": (1, 2, 7),
     "blender": (4, 4, 0),
     "location": "Graph Editor > Sidebar > Graph Generator",
     "description": "Generate graph between saved keyframes.",

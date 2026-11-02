@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "graph_generator"
-version = "1.2.6"
+version = "1.2.7"
 name = "Graph Generator"
 tagline = "Generate graph between saved keyframes"
 maintainer = "The French Monkey"
